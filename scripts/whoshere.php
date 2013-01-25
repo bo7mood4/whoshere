@@ -13,7 +13,7 @@ if (isset($_SESSION["username"])&&isset($_POST["lng"])&&isset($_POST["lat"])){
 
     if ($stmt->execute()){
         //success, let's get the list
-        if ($res = $pdo->query("SELECT username,lng,lat FROM users WHERE NOW() - timestamp < 120 AND lat IS NOT NULL AND lng IS NOT NULL")){
+        if ($res = $pdo->query("SELECT username,lng,lat,message,timestamp FROM users WHERE lat IS NOT NULL AND lng IS NOT NULL")){
             echo json_encode($res->fetchAll(PDO::FETCH_ASSOC));//hopefully
         }
     }

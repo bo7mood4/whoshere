@@ -1,5 +1,7 @@
 //could do:
-markerArray = {};
+console.log("asdasdasdasd");
+infoWindow = new google.maps.InfoWindow();
+globalData = {};
 
 start = function(){
     var mapOptions = {
@@ -14,6 +16,7 @@ start = function(){
 
 end = function(){
     console.log("running end");
+    infoWindow.open(null,null);
     clearInterval(whoshereInterval);
 }
 
@@ -54,6 +57,15 @@ function processOthers(data){
     }
     else{
         for (var i = 0; i < data.length; i++){
+            if (!globalData[data[i]["username"]]){
+                globalData[data[i]["username"]] = {}
+            }
+            var target = globalData[data[i]["username"]];
+            target["lat"] = data[i]["lat"];
+            target["lng"] = data[i]["lng"];
+            target["message"] = data[i]["message"];
+            target["timestamp"] = data[i]["timestamp"];
+            
             if (typeof (lowlat) === "undefined"){
                 var lowlat = data[i]["lat"];
                 var lowlng = data[i]["lng"];
@@ -67,16 +79,18 @@ function processOthers(data){
                 if (highlng < data[i]["lng"])highlng = data[i]["lat"];
             }
             
-            if (markerArray.hasOwnProperty(data[i]["username"])){
+            if (target.hasOwnProperty("marker")){
                 console.log(data[i]["username"]);
-                markerArray[data[i]["username"]].setPosition(new google.maps.LatLng(data[i]["lat"],data[i]["lng"]));
+                target["marker"].setPosition(new google.maps.LatLng(data[i]["lat"],data[i]["lng"]));
             }
             else{
-                markerArray[data[i]["username"]] = new google.maps.Marker({
+                var marker = new google.maps.Marker({
                     position: new google.maps.LatLng(data[i]["lat"],data[i]["lng"]),
                     map: map,
                     title:data[i]["username"]
                 });
+                target["marker"] = marker;
+                google.maps.event.addListener(target["marker"],'click',infoWindowContentWrapper(data[i]["username"]));//check if global data is necessary
             }
         }
         console.log(highlng);
@@ -88,5 +102,13 @@ function processOthers(data){
     }
 }
 
+function infoWindowContentWrapper(username){
+    return function(){
+        infoWindow.setContent(globalData[username]["message"] || "no message to display");
+        infoWindow.open(map,globalData[username]["marker"]);//I think this works
+    }
+}
+
+console.log("what's goin on");
 pageNavigation["map"]["start"] = start;
 pageNavigation["map"]["end"] = end;
