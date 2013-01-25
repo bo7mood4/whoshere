@@ -6,21 +6,24 @@
         <script src = "libraries/jquery.js"></script>
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB10Aj7W330jXyK80bF-U3V0OXMyLm0zyY&sensor=false"></script>
         <script>
-            oldshow = "";
+            start = undefined;
+            end = undefined;
+            prevSide = "";
             pageNavigation = {
-                map: {"script" : "views/whoshere.js", "view" : "views/whoshere.html", "css":".front" ,"cssTransition" : "show-front", "loaded" : false},
+                map: {"script" : "views/whoshere.js", "view" : "views/whoshere.html", "css":".front" ,"cssTransition" : "show-front", "loaded" : false, "start" : start, "end" : end},
                 login : {"script" : "views/login.js", "view" : "views/login.html", "css" : ".left", "cssTransition" : "show-left", "loaded" : false},
-                createUser : {"script" : "", "view" : "views/create.html", "css" : ".right", "cssTransition" : "show-right", "loaded" : false   },
+                logout : {"script" : "views/logout.js", "view" : "views/logout.html", "css" : ".right", "cssTransition" : "show-right", "loaded" : false},
             }
             
             $(function(){
-                mappo = ["show-front","show-back","show-right","show-left","show-top","show-bottom"];
-                i = 1; 
-                $("button").click(function(){
-                   setTimeout(function(){show("login")},1);
+                $("#login").click(function(){
+                   show("login");
+                });
+                $("#logout").click(function(){
+                   show("logout");
                 });
                 
-                $.post("scripts/authenticate.php",function(data){//if session var is already there
+                $.get("scripts/hassession.php",function(data){//if session var is already there
                     console.log(data);
                     if (data == "0"){
                         show("login");
@@ -32,7 +35,13 @@
             });
             
             function show(name){
-                $("#cube").removeClass(oldshow);
+                if (pageNavigation[prevSide]){
+                    console.log("there was a previous slide");
+                    console.log(typeof pageNavigation[prevSide].end)
+                    $("#cube").removeClass(pageNavigation[prevSide].cssTransition);
+                    if (typeof pageNavigation[prevSide].end === "function")pageNavigation[prevSide].end();
+                }
+                
                 $("#cube").addClass(pageNavigation[name].cssTransition);
                 if (!pageNavigation[name]["loaded"]){
                     $.get(pageNavigation[name].view,function(data){
@@ -40,11 +49,11 @@
                         $(pageNavigation[name].css).empty().append(data);//hack, try not loading
                         pageNavigation[name]["loaded"]=true;
                         $.getScript(pageNavigation[name].script,function(){//shitty for now, but we can do caching later
-                            console.log("successfully grabbed script");
+                            if (typeof pageNavigation[name].start === "function")pageNavigation[name].start();
                         });
                     });
                 }
-                oldshow = pageNavigation[name].cssTransition;
+                prevSide = name;
             }
         </script>
     </head>
@@ -54,12 +63,15 @@
           <div id="cube">
             <figure class="front"></figure>
             <figure class="back"></figure>
-            <figure class="right">3</figure>
-            <figure class="left">4</figure>
-            <figure class="top">5</figure>
-            <figure class="bottom">6</figure>
+            <figure class="right"></figure>
+            <figure class="left"></figure>
+            <figure class="top"></figure>
+            <figure class="bottom"></figure>
           </div>
         </section>
-        <button>change face</button>
+        <div id = "footer">
+            <button id = "login">login</button>
+            <button id = "logout">logout</button>
+        </div>
     </body>
 </html>

@@ -1,7 +1,7 @@
 //could do:
 markerArray = {};
 
-function start(){
+start = function(){
     var mapOptions = {
         center: new google.maps.LatLng(0,0),
         zoom: 1,
@@ -12,16 +12,18 @@ function start(){
     whoshereInterval = setInterval(refresh,60000);     
 }
 
-function end(){
+end = function(){
+    console.log("running end");
     clearInterval(whoshereInterval);
 }
 
 function refresh(){
+    console.log("refresh");
     if (navigator.geolocation){
         navigator.geolocation.getCurrentPosition(geo_success,geo_error,{enableHighAccuracy:true});
     }
     else{
-        document.getElementById("body").innerHTML="Geolocation is not supported by this browser.";
+        $("#message").html("Geolocation is not supported by this browser.");
     }
 }
 
@@ -47,7 +49,8 @@ function geo_error(){//non-successful coordinates
 function processOthers(data){
     console.log(data)
     if (data.error){
-        alert(data.error);
+        $("#message").html(data.error);
+        show("login");
     }
     else{
         for (var i = 0; i < data.length; i++){
@@ -64,14 +67,15 @@ function processOthers(data){
                 if (highlng < data[i]["lng"])highlng = data[i]["lat"];
             }
             
-            if (markerArray.hasOwnProperty(data[i]["name"])){
-                markerArray[data[i]["name"]].setCenter(new google.maps.LatLng(data[i]["lat"],data[i]["lng"]));
+            if (markerArray.hasOwnProperty(data[i]["username"])){
+                console.log(data[i]["username"]);
+                markerArray[data[i]["username"]].setPosition(new google.maps.LatLng(data[i]["lat"],data[i]["lng"]));
             }
             else{
-                markerArray[data[i]["name"]] = new google.maps.Marker({
+                markerArray[data[i]["username"]] = new google.maps.Marker({
                     position: new google.maps.LatLng(data[i]["lat"],data[i]["lng"]),
                     map: map,
-                    title:data[i]["name"]
+                    title:data[i]["username"]
                 });
             }
         }
@@ -84,4 +88,5 @@ function processOthers(data){
     }
 }
 
-start();
+pageNavigation["map"]["start"] = start;
+pageNavigation["map"]["end"] = end;
