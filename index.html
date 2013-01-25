@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel = "stylesheet" href = "css/main.css">
+        <link rel= "stylesheet" href = "css/cube.css">
+        <script src = "/libraries/jquery.js"></script>
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB10Aj7W330jXyK80bF-U3V0OXMyLm0zyY&sensor=false"></script>
+        <script>
+            oldshow = "";
+            pageNavigation = {
+                map: {"script" : "views/whoshere.js", "view" : "views/whoshere.html", "css":".front" ,"cssTransition" : "show-front"},
+                login : {"script" : "views/login.js", "view" : "views/login.html", "css" : ".left", "cssTransition" : "show-left"},
+                createUser : {"script" : "", "view" : "views/create.html", "css" : ".right", "cssTransition" : "show-right"},
+            }
+            
+            $(function(){
+                mappo = ["show-front","show-back","show-right","show-left","show-top","show-bottom"];
+                i = 1; 
+                $("button").click(function(){
+                   setTimeout(function(){show("login")},1);
+                });
+                
+                $.post("scripts/authenticate.php",function(data){//if session var is already there
+                    console.log(data);
+                    if (data == "0"){
+                        show("login");
+                    }
+                    else if (data == "1"){
+                        show("map");
+                    }
+                });
+            });
+            
+            function show(name){
+                $.get(pageNavigation[name].view,function(data){
+                    alert(data);
+                    $(pageNavigation[name].css).append(data);
+                    $("#cube").removeClass(oldshow);
+                    $("#cube").addClass(pageNavigation[name].cssTransition)
+                    
+                    $.getScript(pageNavigation[name].script);//shitty for now, but we can do caching later
+                });
+                oldshow = pageNavigation[name].cssTransition;
+            }
+        </script>
+    </head>
+    <body>
+        <div id = "message"></div>
+        <section class="container">
+          <div id="cube">
+            <figure class="front"></figure>
+            <figure class="back"></figure>
+            <figure class="right">3</figure>
+            <figure class="left">4</figure>
+            <figure class="top">5</figure>
+            <figure class="bottom">6</figure>
+          </div>
+        </section>
+        <button>change face</button>
+    </body>
+</html>
