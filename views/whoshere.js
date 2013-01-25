@@ -76,7 +76,7 @@ function processOthers(data){
                 if (lowlat > data[i]["lat"])lowlat = data[i]["lat"];
                 if (lowlng > data[i]["lng"])lowlng = data[i]["lng"];
                 if (highlat < data[i]["lat"])highlat = data[i]["lat"];
-                if (highlng < data[i]["lng"])highlng = data[i]["lat"];
+                if (highlng < data[i]["lng"])highlng = data[i]["lng"];
             }
             
             if (target.hasOwnProperty("marker")){
