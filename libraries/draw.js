@@ -6,17 +6,20 @@ console.log("initiate draw");
 $(function(){
     c=document.getElementById("canvas");
     ctx=c.getContext("2d");
-    ctx.fillStyle="#FF0000";
-    setTimeout(update,12);
+    ctx.fillStyle="#FFFFFF";
+    setTimeout(update,1200);
 });
 
 function getBounds(){
     canvasWidth = $("#canvas").width(); 
     canvasHeight = $("#canvas").height();
+    console.log(canvasWidth);
+    console.log(canvasHeight);
 }
 
 function drawFrame(){
-    ctx.clearRect(0,0,canvasWidth,canvasHeight);
+    ctx.fillStyle="#FFFFFF";
+    ctx.fillRect(0,0,canvasWidth,canvasHeight);
     for(var i = 0; i < asteroids.length; i++){
         ctx.arc(asteroids[i].x,asteroids[i].y,5,0,2*Math.PI);
         ctx.stroke();
