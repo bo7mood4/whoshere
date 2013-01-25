@@ -8,9 +8,9 @@
         <script>
             oldshow = "";
             pageNavigation = {
-                map: {"script" : "views/whoshere.js", "view" : "views/whoshere.html", "css":".front" ,"cssTransition" : "show-front"},
-                login : {"script" : "views/login.js", "view" : "views/login.html", "css" : ".left", "cssTransition" : "show-left"},
-                createUser : {"script" : "", "view" : "views/create.html", "css" : ".right", "cssTransition" : "show-right"},
+                map: {"script" : "views/whoshere.js", "view" : "views/whoshere.html", "css":".front" ,"cssTransition" : "show-front", "loaded" : false},
+                login : {"script" : "views/login.js", "view" : "views/login.html", "css" : ".left", "cssTransition" : "show-left", "loaded" : false},
+                createUser : {"script" : "", "view" : "views/create.html", "css" : ".right", "cssTransition" : "show-right", "loaded" : false   },
             }
             
             $(function(){
@@ -32,14 +32,18 @@
             });
             
             function show(name){
-                $.get(pageNavigation[name].view,function(data){
-                    alert(data);
-                    $(pageNavigation[name].css).append(data);
-                    $("#cube").removeClass(oldshow);
-                    $("#cube").addClass(pageNavigation[name].cssTransition)
-                    
-                    $.getScript(pageNavigation[name].script);//shitty for now, but we can do caching later
-                });
+                $("#cube").removeClass(oldshow);
+                $("#cube").addClass(pageNavigation[name].cssTransition);
+                if (!pageNavigation[name]["loaded"]){
+                    $.get(pageNavigation[name].view,function(data){
+                        console.log(data);
+                        $(pageNavigation[name].css).empty().append(data);//hack, try not loading
+                        pageNavigation[name]["loaded"]=true;
+                        $.getScript(pageNavigation[name].script,function(){//shitty for now, but we can do caching later
+                            console.log("successfully grabbed script");
+                        });
+                    });
+                }
                 oldshow = pageNavigation[name].cssTransition;
             }
         </script>
