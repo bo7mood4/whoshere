@@ -1,5 +1,4 @@
 //could do:
-console.log("asdasdasdasd");
 infoWindow = new google.maps.InfoWindow();
 globalData = {};
 
