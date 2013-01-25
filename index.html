@@ -4,6 +4,7 @@
         <link rel = "stylesheet" href = "css/main.css">
         <link rel= "stylesheet" href = "css/cube.css">
         <script src = "libraries/jquery.js"></script>
+        <script src = "libraries/realshadow.js"></script>
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB10Aj7W330jXyK80bF-U3V0OXMyLm0zyY&sensor=false"></script>
         <script>
             prevSide = "";
@@ -16,7 +17,9 @@
             }
             
             $(function(){
+                $("figure").realshadow();
                 $("#login").click(function(){
+                    $("#message").html("please login");
                    show("login");
                 });
                 $("#logout").click(function(){
@@ -37,29 +40,22 @@
                     });
                 });
                 
-                console.log(Math.floor($("body").width() / 2 - 300)+"pxawdfasdfasdfasdfasdf");
-                
-                $(".container").css({"left" : Math.floor($("body").width() / 2 - 300)+"px"});
+                $(".container").css({"left" : Math.floor($("body").width() / 2 - 300)+"px"}); //TODO: make cube resize with browser
                 
                 $.get("scripts/hassession.php",function(data){//if session var is already there
-                    console.log(data);
                     if (data == "0"){
                         $("#message").html("please login");
                         show("login");
                     }
                     else if (data == "1"){
                         $("#message").html("welcome back!");
-
                         show("map");
                     }
                 });
             });
             
             function show(name){
-                console.log(pageNavigation);
                 if (typeof pageNavigation[prevSide] !== "undefined"){
-                    console.log("there was a previous slide");
-                    console.log(typeof pageNavigation[prevSide].end)
                     $("#cube").removeClass(pageNavigation[prevSide].cssTransition);
                     if (typeof pageNavigation[prevSide].end === "function")pageNavigation[prevSide].end();
                 }
@@ -67,14 +63,11 @@
                 $("#cube").addClass(pageNavigation[name].cssTransition);
                 if (pageNavigation[name]["loaded"] == false){
                     $.get(pageNavigation[name].view,function(data){
-                        console.log(data);
-                        $(pageNavigation[name].css).empty().append(data);//hack, try not loading
+                        $(pageNavigation[name].css).append(data);
                         pageNavigation[name]["loaded"]=true;
-                        console.log(pageNavigation[name].script);
+                        
                         $.getScript(pageNavigation[name].script,function(){//shitty for now, but we can do caching later
-                            console.log("got scripts");
                             if (typeof pageNavigation[name].start === "function"){
-                                console.log("running start");
                                 pageNavigation[name].start();
                             }
                         });
@@ -82,7 +75,6 @@
                 }
                 else{
                     if (typeof pageNavigation[name].start === "function"){
-                        console.log("running start");
                         pageNavigation[name].start();
                     }
                 }
@@ -92,6 +84,7 @@
     </head>
     <body>
         <div id = "message"></div>
+        <canvas id = "canvas"></canvas>
         <section class="container">
           <div id="cube">
             <figure class="front"></figure>

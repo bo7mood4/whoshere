@@ -21,7 +21,7 @@ end = function(){
 }
 
 function refresh(){
-    console.log("refresh");
+    $("#message").html("refreshing data...");
     if (navigator.geolocation){
         navigator.geolocation.getCurrentPosition(geo_success,geo_error,{enableHighAccuracy:true});
     }
@@ -100,6 +100,7 @@ function processOthers(data){
         console.log("woohoo");
         map.fitBounds(bounds);
     }
+    $("#message").html("data refreshed!");
 }
 
 function infoWindowContentWrapper(username){
