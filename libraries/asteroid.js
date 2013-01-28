@@ -1,12 +1,7 @@
 SCALE_ASTEROID_SIZE = 27;
 
 function Asteroid(center,scalar,velocity) {
-    this.center = center;
-    this.previousPosition = center;
-    this.scale = scalar;
-    this.radius = SCALE_ASTEROID_SIZE*scalar;
-    this.velocity = velocity;
-    this.points = [
+    Obj.call(this,center,scalar,SCALE_ASTEROID_SIZE*scalar,[
                 new Point(0,9).scale(scalar),
                 new Point(-16,29).scale(scalar),
                 new Point(-30,9).scale(scalar),
@@ -19,28 +14,61 @@ function Asteroid(center,scalar,velocity) {
                 new Point(13,29).scale(scalar),
                 new Point(0,29).scale(scalar),
                 new Point(0,9).scale(scalar)
-            ];
+            ]);
+    this.previousPosition = center;
+    this.velocity = velocity;
 }
 
-Asteroid.prototype.Draw = function(ctx,debug){
-    ctx.beginPath();
-    ctx.moveTo(this.center.x + this.points[0].x,this.center.y + this.points[0].y)
-    for (var i = 1; i < this.points.length; i++){
-        ctx.lineTo(this.center.x + this.points[i].x,this.center.y + this.points[i].y);
-    }//bledaow
-    if (debug){
-        ctx.moveTo(this.center.x,this.center.y);
-        ctx.lineTo(this.velocity.x*10 + this.center.x,this.velocity.y*10 + this.center.y);
+Asteroid.prototype = Object.create(Obj.prototype, {
+        Bounce : {
+            value : function(other){
+                var temp = this.velocity;
+                this.velocity = other.velocity;
+                other.velocity = temp;
+            },
+            enumerable: true,
+            configurable: true, 
+            writable: true
+        },
+    
+        Move : {
+            value : function(vector){
+                this.previousPosition = this.center.clone();
+                this.center.add(vector||this.velocity)
+            },
+            enumerable: true,
+            configurable: true, 
+            writable: true
+        },
+        
+        Destroy : {
+            value : function(){
+                if (scale > .5) return [
+                                    new Asteroid(
+                                        this.center.add(
+                                            new Point(
+                                                SCALE_ASTEROID_SIZE*.75,
+                                                SCALE_ASTEROID_SIZE*.75
+                                            )
+                                        ),
+                                        this.scale/2,
+                                        this.velocity
+                                    ),
+                                ];
+                                
+                else return [];
+            },
+            
+            enumerable: true,
+            configurable: true, 
+            writable: true
+        }
     }
-    ctx.stroke();
-};
+);
 
-Asteroid.prototype.Collide = function(other){
-    if (this.center.distance(other.center) < (this.radius + other.radius)) return true;
-    return false;
-};
 
-Asteroid.prototype.Bounce = function(other){
+
+Asteroid.prototype.BounceNew = function(other){
     this.velocity = new Point(
                         (this.velocity.x * (this.scale - other.scale) + 2 * other.scale * other.velocity.x) / (this.scale + other.scale),
                         (this.velocity.y * (this.scale - other.scale) + 2 * other.scale * other.velocity.y) / (this.scale + other.scale)
@@ -54,24 +82,6 @@ Asteroid.prototype.Bounce = function(other){
     other.center = other.previousPosition;
 }
 
-Asteroid.prototype.Move = function(vector){
-    this.previousPosition = this.center.clone();
-    this.center.add(vector||this.velocity)
-};
 
-Asteroid.prototype.Destroy = function(){
-    if (scale > .5) return [
-                        new Asteroid(
-                            this.center.add(
-                                new Point(
-                                    SCALE_ASTEROID_SIZE*.75,
-                                    SCALE_ASTEROID_SIZE*.75
-                                )
-                            ),
-                            this.scale/2,
-                            this.velocity
-                        ),
-                    ];
-                    
-    else return [];
-}
+
+
