@@ -31,7 +31,15 @@
                    show("logout");
                 });
                 $("#updateStatus").click(function(){
-                   show("message");//TODO: change to status
+                   $.get("scripts/hassession.php",function(data){//if session var is already there
+                        console.log(data);
+                        if (data == "0"){
+                            $("#message").html("you need to log in first");
+                        }
+                        else if (data == "1"){
+                            show("message");
+                        }
+                    });
                 });
                 $("#home").click(function(){
                    $.get("scripts/hassession.php",function(data){//if session var is already there
@@ -45,7 +53,7 @@
                     });
                 });
                 
-                $(".container").css({"left" : Math.floor($("body").width() / 2 - 300)+"px"}); //TODO: make cube resize with browser
+                $(".container").css({"left" : Math.floor($("html").width() / 2 - 300)+"px"}); //TODO: make cube resize with browser
                 
                 $.get("scripts/hassession.php",function(data){//if session var is already there
                     if (data == "0"){
@@ -88,7 +96,9 @@
         </script>
     </head>
     <body>
-        <div id = "message"></div>
+        <div id = "messageContainer">
+            <div id = "message"></div>
+        </div>
         <canvas id = "canvas"></canvas>
         <section class="container">
           <div id="cube">
@@ -101,10 +111,10 @@
           </div>
         </section>
         <div id = "footer">
-            <button id = "login">login</button>
-            <button id = "logout">logout</button>
-            <button id = "updateStatus">update status</button>
-            <button id = "home">map screen</button>
+            <div class = "button" id = "login">login</div>
+            <div class = "button" id = "logout">logout</div>
+            <div class = "button" id = "updateStatus">update status</div>
+            <div class = "button" id = "home">map screen</div>
         </div>
     </body>
 </html>

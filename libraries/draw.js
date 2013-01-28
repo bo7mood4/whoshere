@@ -71,8 +71,8 @@ function update(){
     
     if (shipleft == true)ship.Turn(-.2);
     if (shipright == true)ship.Turn(.2);
-    if (shipthrust == true)ship.Thrust(.05);
-    if (shipreverse == true)ship.Thrust(-.05);
+    if (shipthrust == true)ship.Thrust(.2);
+    if (shipreverse == true)ship.Thrust(-.2);
     
     ship.Move();
     checkForOB(ship);

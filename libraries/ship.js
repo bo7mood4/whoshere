@@ -35,7 +35,7 @@ Ship.prototype = Object.create(Obj.prototype, {
     },
     Thrust : {
         value : function(num){
-            this.velocity.add(new Point())
+            this.velocity.add(new Point(Math.cos(this.facing)*num,Math.sin(this.facing)*num));
         },
         enumerable: true,
         configurable: true, 
@@ -43,7 +43,6 @@ Ship.prototype = Object.create(Obj.prototype, {
     },
     Move : {
         value : function(){
-            console.log(Math.cos(this.facing)*this.speed);
             this.center.add(this.velocity);//in this case, velocity is a Point where x is length and y is angle
         },
         enumerable: true,

@@ -1,7 +1,7 @@
 
 
 .container {
-  top:25px;
+  top:30px;
   width: 600px;
   height: 600px;
   position: fixed;
@@ -28,12 +28,21 @@
 }
 
 #cube figure {
-margin:0;
+  margin:0;
   display: block;
   position: absolute;
-  width: 596px;
-  height: 596px;
-  border: 2px solid black;
+  width: 590px;
+  height: 590px;
+  border: 5px solid black;
+  
+background: rgb(11,97,164); /* Old browsers */
+background: -moz-linear-gradient(top, rgba(11,97,164,1) 0%, rgba(63,146,210,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(11,97,164,1)), color-stop(100%,rgba(63,146,210,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, rgba(11,97,164,1) 0%,rgba(63,146,210,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, rgba(11,97,164,1) 0%,rgba(63,146,210,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, rgba(11,97,164,1) 0%,rgba(63,146,210,1) 100%); /* IE10+ */
+background: linear-gradient(to bottom, rgba(11,97,164,1) 0%,rgba(63,146,210,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0b61a4', endColorstr='#3f92d2',GradientType=0 ); /* IE6-9 */
 
 }
 
@@ -43,24 +52,7 @@ margin:0;
        -o-backface-visibility: hidden;
           backface-visibility: hidden;
 }
-#cube .front{
-    background-color:white;
-}
-#cube .back{
-    background-color:white;
-}
-#cube .left{
-    background-color:white;
-}
-#cube .right{
-    background-color:white;
-}
-#cube .top{
-    background-color:white;
-}
-#cube .bottom{
-    background-color:white;
-}
+
 
 #cube .front  {
   -webkit-transform: translateZ( 300px );
