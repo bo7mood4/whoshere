@@ -5,21 +5,21 @@ console.log("initiate draw");
 
 $(function(){
     c=document.getElementById("canvas");
+    c.width = 300;
+    c.height = 300;
     ctx=c.getContext("2d");
     ctx.fillStyle="#FFFFFF";
-    setTimeout(update,1200);
+    update();
 });
 
 function getBounds(){
-    canvasWidth = $("#canvas").width(); 
-    canvasHeight = $("#canvas").height();
-    console.log(canvasWidth);
-    console.log(canvasHeight);
+    console.log(c.width);
+    console.log(c.height);
 }
 
 function drawFrame(){
-    ctx.fillStyle="#FFFFFF";
-    ctx.fillRect(0,0,canvasWidth,canvasHeight);
+    ctx.fillStyle="#FFF";
+    ctx.fillRect(0,0,c.width,c.height);
     for(var i = 0; i < asteroids.length; i++){
         ctx.arc(asteroids[i].x,asteroids[i].y,5,0,2*Math.PI);
         ctx.stroke();
@@ -36,7 +36,7 @@ function update(){
     getBounds();
     checkForOB();
     drawFrame();
-    setTimeout(update,12);
+    setTimeout(update,33);
 }
 
 function checkForCollisions(){
@@ -45,10 +45,10 @@ function checkForCollisions(){
 
 function checkForOB(){
     for(var i = 0; i < asteroids.length; i++){
-        if (asteroids[i].x > canvasWidth)asteroids[i].x = 0;
-        if (asteroids[i].x < 0)asteroids[i].x = canvasWidth;
+        if (asteroids[i].x > c.width)asteroids[i].x = 0;
+        if (asteroids[i].x < 0)asteroids[i].x = c.width;
         
-        if (asteroids[i].y > canvasHeight)asteroids[i].y = 0;
-        if (asteroids[i].y < 0)asteroids[i].y = canvasHeight;
+        if (asteroids[i].y > c.height)asteroids[i].y = 0;
+        if (asteroids[i].y < 0)asteroids[i].y = c.height;
     }
 }
