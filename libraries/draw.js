@@ -1,6 +1,5 @@
-asteroid = [];
 
-asteroids  = [{x:30,y:30,dx:1,dy:1}];
+asteroids  = [Asteroid(Point(30,30),1,Point(1,1))];
 console.log("initiate draw");
 
 $(function(){
@@ -12,43 +11,33 @@ $(function(){
     update();
 });
 
-function getBounds(){
-    console.log(c.width);
-    console.log(c.height);
+function getBounds(){//static for now
+    //console.log(c.width);
+    //console.log(c.height);
 }
 
 function drawFrame(){
     ctx.fillStyle="#FFF";
     ctx.fillRect(0,0,c.width,c.height);
     for(var i = 0; i < asteroids.length; i++){
-        ctx.arc(asteroids[i].x,asteroids[i].y,5,0,2*Math.PI);
-        ctx.stroke();
+        
     }
 }
 
 function update(){
     console.log(asteroids);
     for(var i = 0; i < asteroids.length; i++){
-        asteroids[i].x += asteroids[i].dx;
-        asteroids[i].y += asteroids[i].dy;
+        asteroids[i].Move();
+        checkForOB(asteroids[i]);
     }
-    checkForCollisions();
-    getBounds();
-    checkForOB();
-    drawFrame();
     setTimeout(update,33);
 }
 
-function checkForCollisions(){
-    
-}
 
-function checkForOB(){
-    for(var i = 0; i < asteroids.length; i++){
-        if (asteroids[i].x > c.width)asteroids[i].x = 0;
-        if (asteroids[i].x < 0)asteroids[i].x = c.width;
-        
-        if (asteroids[i].y > c.height)asteroids[i].y = 0;
-        if (asteroids[i].y < 0)asteroids[i].y = c.height;
-    }
+function checkForOB(Asteroid){
+    if (Asteroid.center.x > c.width)Asteroid.center.x = 0;
+    if (Asteroid.center.y > c.height)Asteroid.center.y = 0;
+    
+    if (Asteroid.center.x < 0)Asteroid.center.x = c.width;
+    if (Asteroid.center.y < 0)Asteroid.center.y = c.height;
 }
