@@ -16,14 +16,16 @@ function getBounds(){//static for now
 }
 
 function update(){
-    console.log(asteroids);
+    //console.log(asteroids);
     ctx.clearRect(0,0,c.width,c.height);
     for(var i = 0; i < asteroids.length; i++){
         asteroids[i].Move();
         checkForOB(asteroids[i]);
         asteroids[i].Draw(ctx);
     }
-    setTimeout(update,33);
+    if (window.webkitRequestAnimationFrame)window.webkitRequestAnimationFrame(update);
+    else if (window.moxRequestAnimationFrame)window.mozRequestAnimationFrame(update);
+    else alert ("unsupported browser");
 }
 
 
