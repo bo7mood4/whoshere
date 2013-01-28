@@ -11,10 +11,10 @@ $(function(){
                 new Point(
                     Math.floor(Math.random()*c.width),
                     Math.floor(Math.random()*c.height)),
-                1,
+                Math.random()*1.5+.5,
                 new Point(
-                    Math.random() > .5 ? 1 : -1,
-                    Math.random() > .5 ? 1 : -1
+                    Math.random() * 2 * (Math.random() > .5 ? 1.0 : -1.0),
+                    Math.random() * 2 * (Math.random() > .5 ? 1.0 : -1.0)
                 )
             )
         )
@@ -39,6 +39,7 @@ function update(){
         for (var j = i + 1; j < asteroids.length; j++){
             if (asteroids[i].Collide(asteroids[j])){
                 console.log("tink");
+                console.log(asteroids[i].velocity);
                 asteroids[i].Bounce(asteroids[j]);
             }
         }
