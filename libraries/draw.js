@@ -1,8 +1,7 @@
 
-asteroids  = [Asteroid(Point(30,30),1,Point(1,1))];
-console.log("initiate draw");
 
 $(function(){
+    asteroids  = [Asteroid(Point(30,30),1,Point(1,1))];
     c=document.getElementById("canvas");
     c.width = 300;
     c.height = 300;
