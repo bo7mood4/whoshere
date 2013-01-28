@@ -1,7 +1,7 @@
 
 
 $(function(){
-    asteroids  = [Asteroid(Point(30,30),1,Point(1,1))];
+    asteroids = [new Asteroid(new Point(30,30),1,new Point(1,1))];
     c=document.getElementById("canvas");
     c.width = 300;
     c.height = 300;
@@ -15,19 +15,13 @@ function getBounds(){//static for now
     //console.log(c.height);
 }
 
-function drawFrame(){
-    ctx.fillStyle="#FFF";
-    ctx.fillRect(0,0,c.width,c.height);
-    for(var i = 0; i < asteroids.length; i++){
-        
-    }
-}
-
 function update(){
     console.log(asteroids);
+    ctx.clearRect(0,0,c.width,c.height);
     for(var i = 0; i < asteroids.length; i++){
         asteroids[i].Move();
         checkForOB(asteroids[i]);
+        asteroids[i].Draw(ctx);
     }
     setTimeout(update,33);
 }
