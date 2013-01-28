@@ -1,10 +1,24 @@
 
 
 $(function(){
-    asteroids = [new Asteroid(new Point(30,30),1,new Point(1,1))];
     c=document.getElementById("canvas");
-    c.width = 300;
-    c.height = 300;
+    c.width = $(window).width();
+    c.height = $(window).height();
+    asteroids = [];
+    for (var i = 0; i < 7; i++){
+        asteroids.push(
+            new Asteroid(
+                new Point(
+                    Math.floor(Math.random()*c.width),
+                    Math.floor(Math.random()*c.height)),
+                1,
+                new Point(
+                    Math.random() > .5 ? 1 : -1,
+                    Math.random() > .5 ? 1 : -1
+                )
+            )
+        )
+    }
     ctx=c.getContext("2d");
     ctx.fillStyle="#FFFFFF";
     update();
@@ -18,11 +32,19 @@ function getBounds(){//static for now
 function update(){
     //console.log(asteroids);
     ctx.clearRect(0,0,c.width,c.height);
-    for(var i = 0; i < asteroids.length; i++){
+    
+    for (var i = 0; i < asteroids.length; i++){
         asteroids[i].Move();
         checkForOB(asteroids[i]);
+        for (var j = i + 1; j < asteroids.length; j++){
+            if (asteroids[i].Collide(asteroids[j])){
+                console.log("tink");
+                asteroids[i].Bounce(asteroids[j]);
+            }
+        }
         asteroids[i].Draw(ctx);
     }
+    
     if (window.webkitRequestAnimationFrame)window.webkitRequestAnimationFrame(update);
     else if (window.moxRequestAnimationFrame)window.mozRequestAnimationFrame(update);
     else alert ("unsupported browser");
