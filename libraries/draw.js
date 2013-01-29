@@ -1,51 +1,11 @@
 $(function(){
-    shipleft = false;
-    shipright = false;
-    shipthrust = false;
-    shipreverse = false;
-    ship = new Ship(new Point(30,30),1);
-    
+    asteroids = [];
     projectiles = [];
-    
-    $(document).keydown(function(event){
-        console.log(event.which);
-        if (event.which == 37){
-            shipleft = true;
-        }
-        if (event.which == 39){
-            shipright = true;
-        }
-        if (event.which == 38){
-            shipthrust = true;
-        }
-        if (event.which == 40){
-            shipreverse = true;
-        }
-        if (event.which == 32){
-            if(projectiles.length < 3)projectiles.push(new Projectile(ship.center.clone(),ship.velocity.magnitude() + 5,ship.facing));
-        }
-    });
-    
-    $(document).keyup(function(event){
-        console.log(event.which);
-        if (event.which == 37){
-            shipleft = false;
-        }
-        if (event.which == 39){
-            shipright = false;
-        }
-        if (event.which == 38){
-            shipthrust = false;
-        }
-        if (event.which == 40){
-            shipreverse = false;
-        }
-    });
     
     c=document.getElementById("canvas");
     c.width = $(window).width();
     c.height = $(window).height();
-    asteroids = [];
+
     for (var i = 0; i < 7; i++){
         asteroids.push(
             new Asteroid(
@@ -74,16 +34,16 @@ function update(){
     //console.log(asteroids);
     ctx.clearRect(0,0,c.width,c.height);
     
-    if (shipleft == true)ship.Turn(-.2);
-    if (shipright == true)ship.Turn(.2);
-    if (shipthrust == true)ship.Thrust(.2);
-    if (shipreverse == true)ship.Thrust(-.2);
-    
-    ship.Move();
-    checkForOB(ship);
-    ship.Draw(ctx);
-    
-    console.log(projectiles.length);
+    if (ship){
+        if (shipleft == true)ship.Turn(-.2);
+        if (shipright == true)ship.Turn(.2);
+        if (shipthrust == true)ship.Thrust(.2);
+        if (shipreverse == true)ship.Thrust(-.2);
+        
+        ship.Move();
+        checkForOB(ship);
+        ship.Draw(ctx);
+    }
     
     for (var i = 0; i < projectiles.length; i++){
         projectiles[i].Update();
@@ -122,7 +82,7 @@ function update(){
     }
     
     if (window.webkitRequestAnimationFrame)window.webkitRequestAnimationFrame(update);
-    else if (window.moxRequestAnimationFrame)window.mozRequestAnimationFrame(update);
+    else if (window.mozRequestAnimationFrame)window.mozRequestAnimationFrame(update);
     else alert ("unsupported browser");
 }
 
@@ -133,4 +93,47 @@ function checkForOB(Asteroid){
     
     if (Asteroid.center.x < 0)Asteroid.center.x = c.width;
     if (Asteroid.center.y < 0)Asteroid.center.y = c.height;
+}
+
+function initShip(){
+    shipleft = false;
+    shipright = false;
+    shipthrust = false;
+    shipreverse = false;
+    ship = new Ship(new Point(30,30),1);
+    
+       $(document).keydown(function(event){
+        console.log(event.which);
+        if (event.which == 37){
+            shipleft = true;
+        }
+        if (event.which == 39){
+            shipright = true;
+        }
+        if (event.which == 38){
+            shipthrust = true;
+        }
+        if (event.which == 40){
+            shipreverse = true;
+        }
+        if (event.which == 32){
+            if(projectiles.length < 3)projectiles.push(new Projectile(ship.center.clone(),ship.velocity.magnitude() + 5,ship.facing));
+        }
+    });
+    
+    $(document).keyup(function(event){
+        console.log(event.which);
+        if (event.which == 37){
+            shipleft = false;
+        }
+        if (event.which == 39){
+            shipright = false;
+        }
+        if (event.which == 38){
+            shipthrust = false;
+        }
+        if (event.which == 40){
+            shipreverse = false;
+        }
+    });
 }
