@@ -3,6 +3,10 @@ $(function(){
     shipright = false;
     shipthrust = false;
     shipreverse = false;
+    ship = new Ship(new Point(30,30),1);
+    
+    projectiles = [];
+    
     $(document).keydown(function(event){
         console.log(event.which);
         if (event.which == 37){
@@ -16,6 +20,9 @@ $(function(){
         }
         if (event.which == 40){
             shipreverse = true;
+        }
+        if (event.which == 32){
+            if(projectiles.length < 3)projectiles.push(new Projectile(ship.center.clone(),ship.velocity.magnitude() + 5,ship.facing));
         }
     });
     
@@ -39,7 +46,6 @@ $(function(){
     c.width = $(window).width();
     c.height = $(window).height();
     asteroids = [];
-    ship = new Ship(new Point(30,30),1);
     for (var i = 0; i < 7; i++){
         asteroids.push(
             new Asteroid(
@@ -68,7 +74,6 @@ function update(){
     //console.log(asteroids);
     ctx.clearRect(0,0,c.width,c.height);
     
-    
     if (shipleft == true)ship.Turn(-.2);
     if (shipright == true)ship.Turn(.2);
     if (shipthrust == true)ship.Thrust(.2);
@@ -77,6 +82,31 @@ function update(){
     ship.Move();
     checkForOB(ship);
     ship.Draw(ctx);
+    
+    console.log(projectiles.length);
+    
+    for (var i = 0; i < projectiles.length; i++){
+        projectiles[i].Update();
+        projectiles[i].Move();
+        projectiles[i].Draw(ctx);
+        
+        if (projectiles[i].life < 0){
+            projectiles.splice(i,1);
+            i--;//does this work
+            continue;//projectile died so no need to check collision
+        }
+        
+        for (var j = 0; j < asteroids.length; j++){
+            if (projectiles[i].Collide(asteroids[j])){
+                newasteroids = asteroids[j].Destroy();
+                asteroids.splice(j,1);
+                asteroids = asteroids.concat(newasteroids);
+                projectiles.splice(i,1);
+                i--;
+                break;//can only collide with one asteroid
+            }
+        }
+    }
     
     for (var i = 0; i < asteroids.length; i++){
         asteroids[i].Move();

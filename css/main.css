@@ -7,6 +7,14 @@ top:0;
 text-align:center;
 }
 
+h1#logout{
+          -webkit-transform: translateZ( 300px );
+             -moz-transform: translateZ( 300px );
+               -o-transform: translateZ( 300px );
+                  transform: translateZ( 300px );
+                  z-index:3;
+        }
+
 #message{
 position:relative;
 display:block;

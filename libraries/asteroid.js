@@ -43,17 +43,37 @@ Asteroid.prototype = Object.create(Obj.prototype, {
         
         Destroy : {
             value : function(){
-                if (scale > .5) return [
+                if (this.scale > .5) return [
                                     new Asteroid(
-                                        this.center.add(
+                                        this.center.plus(
                                             new Point(
                                                 SCALE_ASTEROID_SIZE*.75,
                                                 SCALE_ASTEROID_SIZE*.75
                                             )
                                         ),
                                         this.scale/2,
-                                        this.velocity
+                                        this.velocity.plus(
+                                            new Point(
+                                                Math.random(),
+                                                Math.random()
+                                            )
+                                        )
                                     ),
+                                    new Asteroid(
+                                        this.center.minus(
+                                            new Point(
+                                                SCALE_ASTEROID_SIZE*.75,
+                                                SCALE_ASTEROID_SIZE*.75
+                                            )
+                                        ),
+                                        this.scale/2,
+                                        this.velocity.plus(
+                                            new Point(
+                                                Math.random(),
+                                                Math.random()
+                                            )
+                                        )
+                                    )
                                 ];
                                 
                 else return [];
