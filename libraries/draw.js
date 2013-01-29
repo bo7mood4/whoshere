@@ -22,6 +22,7 @@ $(function(){
     }
     ctx=c.getContext("2d");
     ctx.fillStyle="#FFFFFF";
+    initShip();
     update();
 });
 
