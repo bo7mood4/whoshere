@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100%; width : 100%; position:fixed}
+      body { height: 100%; width:100%; margin: 0; padding: 0 }
+      #map_canvas { height: 100%; width:100%; position:fixed; clear:both}
+      #buttons{height:30px;text-align:center;position:fixed;bottom:0;}
+    </style>
+    <script type="text/javascript"
+      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyB10Aj7W330jXyK80bF-U3V0OXMyLm0zyY&sensor=false&libraries=weather">
+    </script>
+    <script type="text/javascript">
+    var map;
+
+    function initialize() {
+        //Maps
+        var myCoordinates = new google.maps.LatLng(30,30);
+        var mapOptions = {
+            zoom: 10,
+            center: myCoordinates,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            disableDefaultUI : true
+        };
+        map = new google.maps.Map(document.getElementById('map_canvas'),mapOptions);
+        
+        //Markers
+        marker = new google.maps.Marker({
+            position: myCoordinates,
+            title:"Us!"
+        });
+        marker.setMap(map);
+        
+        //Geolocation
+        if (navigator.geolocation){
+            navigator.geolocation.getPosition(geo_success,geo_error,{enableHighAccuracy:true});
+        }
+        else{
+            document.getElementById("header").innerHTML="Geolocation is not supported by this browser.";
+        }
+    }
+
+    function geo_success(position){//on successful coordinates
+        document.getElementById("header").innerHTML = "your position is (" + position.coords.latitude + "," + position.coords.longitude + "). you are traveling at " + position.coords.speed * 2.2369 + " mph";
+        var myCoordinates = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+        map.setCenter(myCoordinates)
+        marker.setPosition(myCoordinates);
+    }
+
+    function geo_error(){//non-successful coordinates
+        document.getElementById("header").innerHTML = "could not get position";
+    }
+
+    window.onload = initialize;//once the web page finishes loading, we fire off this function
+    </script>
+  </head>
+  <body>
+      <div id = "header">calculating your position...</div>
+      <div id="map_canvas"></div>
+  </body>
+</html>
