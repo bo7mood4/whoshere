@@ -1,6 +1,6 @@
 <?php
     $username = "root";
-    $password = "8Characters!";//mysql.99;
+    $password = "YOURPASSWORD";//mysql.99;
     $database = "whoshere";//menu;    
     $host = "localhost";
 
