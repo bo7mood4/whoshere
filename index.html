@@ -20,6 +20,7 @@
                 login : {"script" : "views/login.js", "view" : "views/login.html", "css" : ".left", "cssTransition" : "show-left", "loaded" : false},
                 logout : {"script" : "views/logout.js", "view" : "views/logout.html", "css" : ".right", "cssTransition" : "show-right", "loaded" : false},
                 message : {"script" : "views/message.js", "view" : "views/message.html", "css" : ".front", "cssTransition" : "show-front", "loaded" : false},
+                play : {"script" : "views/play.js", "view" : "views/nothing", "css":".top", "cssTransition" : "show-top", "loaded" : false}
             }
             
             $(function(){
@@ -53,6 +54,10 @@
                         }
                     });
                 });
+                $("#play").click(function(){
+                    $("#message").html("let's play!");
+                   show("play");
+                });
                 
                 $(".container").css({"left" : Math.floor($("html").width() / 2 - 300)+"px"}); //TODO: make cube resize with browser
                 
@@ -76,15 +81,20 @@
                 
                 $("#cube").addClass(pageNavigation[name].cssTransition);
                 if (pageNavigation[name]["loaded"] == false){
+                    console.log("unloaded");
                     $.get(pageNavigation[name].view,function(data){
+                        console.log("got data");
                         $(pageNavigation[name].css).append(data);
                         pageNavigation[name]["loaded"]=true;
                         
-                        $.getScript(pageNavigation[name].script,function(){//shitty for now, but we can do caching later
+                        console.log("before script")
+                        $.getScript(pageNavigation[name].script,function(){
+                            console.log("hello");
                             if (typeof pageNavigation[name].start === "function"){
+                                console.log('starting');
                                 pageNavigation[name].start();
                             }
-                        });
+                        },function(){alert("wai")});
                     });
                 }
                 else{
@@ -116,6 +126,7 @@
             <div class = "button" id = "logout">logout</div>
             <div class = "button" id = "updateStatus">update status</div>
             <div class = "button" id = "home">map screen</div>
+            <div class = "button" id = "play">play!</div>
         </div>
     </body>
 </html>

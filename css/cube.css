@@ -20,11 +20,11 @@
      -moz-transform-style: preserve-3d;
        -o-transform-style: preserve-3d;
           transform-style: preserve-3d;
-  -webkit-transition: -webkit-transform 1s;
-     -moz-transition: -moz-transform 1s;
-       -o-transition: -o-transform 1s;
-          transition: transform 1s;
-   -webkit-transform: translate3D(0, 0, 0)
+  -webkit-transition: -webkit-transform 1s,opacity 2s;
+     -moz-transition: -moz-transform 1s,opacity 2s;
+       -o-transition: -o-transform 1s,opacity 2s;
+          transition: transform 1s,opacity 2s;
+   -webkit-transform: translate3D(0, 0, 0);
 }
 
 #cube figure {
@@ -136,10 +136,24 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0b61a4', end
      -moz-transform: translateZ( -300px ) rotateX(  -90deg );
        -o-transform: translateZ( -300px ) rotateX(  -90deg );
           transform: translateZ( -300px ) rotateX(  -90deg );
+          
   -webkit-animation: show-top 15s;
   -webkit-animation-iteration-count: infinite;
   -webkit-animation-delay:1s;
   -webkit-animation-timing-function: linear;
+  
+  -moz-animation: show-top 15s;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-delay:1s;
+  -moz-animation-timing-function: linear;
+          
+    -webkit-transition: opacity 2s linear 1s,-webkit-transform 1s ;
+     -moz-transition: opacity 2s linear 1s;
+       -o-transition: opacity 2s linear 1s;
+          transition: opacity 2s linear 1s; 
+          
+          opacity:0;
+  
 }
 #cube.show-bottom {
   -webkit-transform: translateZ( -300px ) rotateX(   90deg );

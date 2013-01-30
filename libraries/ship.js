@@ -1,4 +1,4 @@
-function Ship(center,scalar){
+function Ship(center,scalar,invincibility){
     Obj.call(this,center,scalar,12*scalar,[
         new Point(-12,-6).scale(scalar),
         new Point(12,0).scale(scalar),
@@ -6,6 +6,7 @@ function Ship(center,scalar){
         new Point(-6,0).scale(scalar),
         new Point(-12,-6).scale(scalar)
     ]);
+    this.invincibility = invincibility;
     this.facing = 0;
     this.velocity = new Point(0,0);
 }
@@ -21,6 +22,7 @@ Ship.prototype = Object.create(Obj.prototype, {
     },
     Draw : {
         value : function(ctx){
+            if (this.invincibility > 0 && this.invincibility %2 == 0) return;//blink
             var oldpoints = this.points.slice();
             this.points = [];
             for (var i = 0; i < oldpoints.length; i++){
@@ -28,6 +30,15 @@ Ship.prototype = Object.create(Obj.prototype, {
             }
             Obj.prototype.Draw.apply(this, [ctx]);//super
             this.points = oldpoints;
+        },
+        enumerable: true,
+        configurable: true, 
+        writable: true
+    },
+    Update : {
+        value : function(){
+            console.log("updatin");
+            if (this.invincibility > 0)this.invincibility-=1;
         },
         enumerable: true,
         configurable: true, 

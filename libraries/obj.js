@@ -5,7 +5,7 @@ function Obj(center,scalar,radius,points) {
     this.points = points;
 }
 
-Obj.prototype.Draw = function(ctx){
+Obj.prototype.Draw = function(ctx,debug){
     ctx.beginPath();
     ctx.moveTo(this.center.x + this.points[0].x,this.center.y + this.points[0].y)
     for (var i = 1; i < this.points.length; i++){

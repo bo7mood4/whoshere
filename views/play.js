@@ -1,0 +1,2 @@
+pageNavigation["play"].start = initShip;
+

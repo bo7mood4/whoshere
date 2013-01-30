@@ -1,11 +1,21 @@
 $(function(){
     asteroids = [];
     projectiles = [];
+    score = 0;
+    ship = null;
     
     c=document.getElementById("canvas");
     c.width = $(window).width();
     c.height = $(window).height();
 
+    ctx=c.getContext("2d");
+    ctx.fillStyle="#FFFFFF";
+    
+    createAsteroids();
+    update();
+});
+
+function createAsteroids(){
     for (var i = 0; i < 7; i++){
         asteroids.push(
             new Asteroid(
@@ -20,11 +30,7 @@ $(function(){
             )
         )
     }
-    ctx=c.getContext("2d");
-    ctx.fillStyle="#FFFFFF";
-    initShip();
-    update();
-});
+    }
 
 function getBounds(){//static for now
     //console.log(c.width);
@@ -40,7 +46,8 @@ function update(){
         if (shipright == true)ship.Turn(.2);
         if (shipthrust == true)ship.Thrust(.2);
         if (shipreverse == true)ship.Thrust(-.2);
-        
+        ship.Update();
+        console.log(ship.invincibility);
         ship.Move();
         checkForOB(ship);
         ship.Draw(ctx);
@@ -59,6 +66,8 @@ function update(){
         
         for (var j = 0; j < asteroids.length; j++){
             if (projectiles[i].Collide(asteroids[j])){
+                score += 1;
+                $("#message").html("score: "+score);
                 newasteroids = asteroids[j].Destroy();
                 asteroids.splice(j,1);
                 asteroids = asteroids.concat(newasteroids);
@@ -80,6 +89,17 @@ function update(){
             }
         }
         asteroids[i].Draw(ctx);
+        
+        if (ship&&ship.invincibility <= 0){
+            
+            if (asteroids[i].Collide(ship)){
+                $("#message").html("game over! your score is " + score);
+                score = 0;
+                projectiles = [];
+                asteroids = [];
+                ship = null;
+            }
+        }
     }
     
     if (window.webkitRequestAnimationFrame)window.webkitRequestAnimationFrame(update);
@@ -97,11 +117,13 @@ function checkForOB(Asteroid){
 }
 
 function initShip(){
+    if (!asteroids.length)createAsteroids();
+    console.log('called');
     shipleft = false;
     shipright = false;
     shipthrust = false;
     shipreverse = false;
-    ship = new Ship(new Point(30,30),1);
+    ship = new Ship(new Point(c.width/2,c.height/2),1,120);
     
        $(document).keydown(function(event){
         console.log(event.which);
@@ -118,7 +140,7 @@ function initShip(){
             shipreverse = true;
         }
         if (event.which == 32){
-            if(projectiles.length < 3)projectiles.push(new Projectile(ship.center.clone(),ship.velocity.magnitude() + 5,ship.facing));
+            if(ship && projectiles.length < 3)projectiles.push(new Projectile(ship.center.clone(),ship.velocity.magnitude() + 5,ship.facing));
         }
     });
     

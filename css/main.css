@@ -8,11 +8,7 @@ text-align:center;
 }
 
 h1#logout{
-          -webkit-transform: translateZ( 300px );
-             -moz-transform: translateZ( 300px );
-               -o-transform: translateZ( 300px );
-                  transform: translateZ( 300px );
-                  z-index:3;
+          text-align:center;
         }
 
 #message{
@@ -33,15 +29,16 @@ position:fixed;
 }
 
 .bubble{
--webkit-transform: translateZ( -450px );
-     -moz-transform: translateZ( -450px );
-       -o-transform: translateZ( -450px );
-          transform: translateZ( -450px );
+-webkit-transform: translateZ( 220px );
+     -moz-transform: translateZ( 220px );
+       -o-transform: translateZ( 220px );
+          transform: translateZ( 220px );
+          
 xbox-shadow : 5px 5px rgba(0,0,0,.7);
 margin:15px;
 background-color:#66A3D2;
 padding:15px;
-
+z-index:12;
 }
 #footer{
 width:50%;
