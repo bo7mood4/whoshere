@@ -34,7 +34,7 @@
         
         //Geolocation
         if (navigator.geolocation){
-            navigator.geolocation.getPosition(geo_success,geo_error,{enableHighAccuracy:true});
+            navigator.geolocation.watchPosition(geo_success,geo_error,{enableHighAccuracy:true});
         }
         else{
             document.getElementById("header").innerHTML="Geolocation is not supported by this browser.";
@@ -43,6 +43,7 @@
 
     function geo_success(position){//on successful coordinates
         document.getElementById("header").innerHTML = "your position is (" + position.coords.latitude + "," + position.coords.longitude + "). you are traveling at " + position.coords.speed * 2.2369 + " mph";
+        
         var myCoordinates = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
         map.setCenter(myCoordinates)
         marker.setPosition(myCoordinates);
